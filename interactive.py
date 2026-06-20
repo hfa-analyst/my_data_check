@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 import io
 
 
-pd.read_excel("all_together.xlsx")
+df = pd.read_excel("all_together.xlsx")
 
 
 # Page configuration
@@ -144,9 +144,11 @@ def main():
     st.sidebar.header("🔍 Filters")
     
     # Supplier filter
-    suppliers = ['All'] + sorted(analyzer.df_clean['Dukanka'].unique().tolist())
-    selected_supplier = st.sidebar.selectbox("Select Supplier", suppliers)
-    
+# Force everything in the 'Dukanka' column to be text and drop missing values
+    clean_dukanka = analyzer.df_clean['Dukanka'].dropna().astype(str).unique().tolist()
+
+    # Now it is safe to sort!
+    suppliers = ['All'] + sorted(clean_dukanka)    
     # Product type filter
     product_types = ['All'] + sorted(analyzer.df_clean['Type'].unique().tolist())
     selected_type = st.sidebar.selectbox("Select Product Type", product_types)

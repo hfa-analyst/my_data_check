@@ -149,11 +149,7 @@ def main():
 
     # Now it is safe to sort!
     suppliers = ['All'] + sorted(clean_dukanka)    
-    # Product type filter
-    product_types = ['All'] + sorted(analyzer.df_clean['Type'].unique().tolist())
-    selected_type = st.sidebar.selectbox("Select Product Type", product_types)
-    
-    # Price range filter
+   
     if 'Price' in analyzer.df_clean.columns:
         min_price = float(analyzer.df_clean['Price'].min())
         max_price = float(analyzer.df_clean['Price'].max())
@@ -161,7 +157,12 @@ def main():
             "Price Range",
             min_price, max_price, (min_price, max_price)
         )
-    
+        # Add these dropdown boxes so the variables exist!
+        selected_supplier = st.sidebar.selectbox("Select Supplier", suppliers)
+        selected_type = st.sidebar.selectbox("Select Product Type", ['All'] + sorted(analyzer.df_clean['Type'].dropna().astype(str).unique().tolist()))
+
+
+
     # Apply filters
     filtered_data = analyzer.df_clean.copy()
     if selected_supplier != 'All':
